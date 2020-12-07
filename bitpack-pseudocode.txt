@@ -1,0 +1,122 @@
+inicio
+  string names;
+  string lastnames;
+  string cedula;
+  string savings;
+  string password;
+  string age;
+  string sex;
+  string civil_state;
+  string grade;
+  string packed_data;
+  string final_data;
+
+  write "Introduzca datos personales: ";
+
+  write "Cedula: ";
+  read cedula;
+
+  write "Nombres: ";
+  read names;
+
+  write "Apellidos: ";
+  read lastnames;
+  
+  write "Ahorros: ";
+  read savings;
+  
+  write "Contraseña: ";
+  read password;
+
+  write "Edad: ";
+  read age;
+
+  write "Sexo (M, F): ";
+  read sex;
+
+  write "Estado Civil (S, C): ";
+  read civil_state;
+
+  write "Grado Académico (I, B, G, P): ";
+  read grade;
+
+  packed_data = pack_data(age, sex, civil_state, grade)
+  final_data = cedula,  names,  lastnames,  savings,  password, packed_data
+
+  function pack_data(data: StringArray)
+    packed_info = 0;
+    age = data[0];
+    sex = data[1];
+    civil_state = data[2];
+    grade = data[3];
+
+    packed_info = age << 4;
+
+    if sex == 'M' then
+      packed_info = packed_info | 8;
+    endif;  
+
+    if civil_state == 'C' then
+      packed_info = packed_info | 4;
+    endif;
+
+    if grade == 'P' then
+      packed_info = packed_info | 3;
+
+    else if grade == 'G' then
+      packed_info = packed_info | 2;
+
+    else if grade == 'B' then
+      packed_info = packed_info | 1;
+    endif;
+
+    return packed_info;
+
+  function unpack_data(data: Int)
+    string age;
+    string binary_age;
+    string sex;
+    string civil_state;
+    string grade;
+
+    packed_info = data;
+    restante = int;
+    unpacked_info = string;
+
+    while packed_info > 0
+      restante = packed_info % 2;
+      packed_info /= 2;
+      unpacked_info = string(restante) + unpacked_info;
+    done
+
+    if unpacked_info.substring(unpacked_info.length-2, unpacked_info.length-1) == '11' then
+      grade = 'P'
+
+    else if unpacked_info.substring(unpacked_info.length-2, unpacked_info.length-1) == '10' then
+      grade = 'G'
+
+    else if unpacked_info.substring(unpacked_info.length-2, unpacked_info.length-1) == '01' then
+      grade = 'B'
+
+    else
+      grade = 'I'
+    endif
+
+    if unpacked_info.slice(unpacked_info.length-3) == '1' then
+      civil_state = 'C'
+    else
+      civil_state = 'S'
+    endif
+
+    if unpacked_info.slice(unpacked_info.length-4) == '1' then
+      sex = 'M'
+    else
+      sex = 'F'
+    endif
+
+    binary_age = unpacked_info.substring(0, unpacked_info.length-5)
+    
+    return unpacked_info;
+
+    
+fin
