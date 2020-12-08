@@ -8,8 +8,10 @@ inicio
   string sex;
   string civil_state;
   string grade;
-  string packed_data;
-  string final_data;
+  int packed_data;
+  string unpacked_data;
+  string bit_packed;
+  string bit_unpacked;
 
   write "Introduzca datos personales: ";
 
@@ -40,9 +42,6 @@ inicio
   write "Grado Académico (I, B, G, P): ";
   read grade;
 
-  packed_data = pack_data(age, sex, civil_state, grade)
-  final_data = cedula,  names,  lastnames,  savings,  password, packed_data
-
   function pack_data(data: StringArray)
     packed_info = 0;
     age = data[0];
@@ -72,14 +71,29 @@ inicio
 
     return packed_info;
 
-  function unpack_data(data: Int)
+  function unpack_age(age: int)
+    int vdecimal = 0;
+    int base1 = 1;
+    int temp = age;
+
+    while temp > 0
+      int ult_digit = temp % 10;
+      temp = temp / 10;
+      vdecimal += ult_digit * base1;
+      base1 = base1 * 2;
+    done;
+
+    return string(vdecimal);
+
+
+  function unpack_data(packed_info: Int)
+    string data;
     string age;
-    string binary_age;
+    int binary_age;
     string sex;
     string civil_state;
     string grade;
 
-    packed_info = data;
     restante = int;
     unpacked_info = string;
 
@@ -87,36 +101,49 @@ inicio
       restante = packed_info % 2;
       packed_info /= 2;
       unpacked_info = string(restante) + unpacked_info;
-    done
+    done;
 
     if unpacked_info.substring(unpacked_info.length-2, unpacked_info.length-1) == '11' then
-      grade = 'P'
+      grade = 'P';
 
     else if unpacked_info.substring(unpacked_info.length-2, unpacked_info.length-1) == '10' then
-      grade = 'G'
+      grade = 'G';
 
     else if unpacked_info.substring(unpacked_info.length-2, unpacked_info.length-1) == '01' then
-      grade = 'B'
+      grade = 'B';
 
     else
-      grade = 'I'
-    endif
+      grade = 'I';
+    endif;
 
     if unpacked_info.slice(unpacked_info.length-3) == '1' then
-      civil_state = 'C'
+      civil_state = 'C';
     else
-      civil_state = 'S'
-    endif
+      civil_state = 'S';
+    endif;
 
     if unpacked_info.slice(unpacked_info.length-4) == '1' then
-      sex = 'M'
+      sex = 'M';
     else
-      sex = 'F'
-    endif
+      sex = 'F';
+    endif;
 
-    binary_age = unpacked_info.substring(0, unpacked_info.length-5)
+    binary_age = int(unpacked_info.substring(0, unpacked_info.length-5));
+
+    age = unpack_age(binary_age);
+    vdecimal
     
-    return unpacked_info;
+    data = age + ', ' + sex + ', ' + civil_state + ', ' + grade;
+
+    return data;
+
+  packed_data = pack_data(age, sex, civil_state, grade);
+  unpacked_data = unpack_data(packed_data);
+  bit_packed = cedula + ', ' + names + ', ' + lastnames + ', ' + savings + ', ' + password + ', ' + string(packed_data);
+  bit_unpacked = cedula + ', ' + names + ', ' + lastnames + ', ' + savings + ', ' + password + ', ' + unpacked_data;
+
+  write bit_packed;
+  write bit_unpacked;
 
     
 fin
