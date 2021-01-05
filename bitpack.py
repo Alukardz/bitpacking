@@ -1,28 +1,45 @@
 import math
-
-packed_info = 0
-age = 200
-sex = 'M'
-civil_state = 'C'
-grado_academico = 'P'
+import sys
+import os
+from char_char import read_char, read_int
 
 
-packed_info = age << 4
+doc_dir = os.path.join(os.getcwd(), sys.argv[1])
 
-if sex == 'M':
-    packed_info = packed_info | 8
+def main():
+    ced = '03104263227'
+    name = 'Vlad'
+    lastname = 'Delar'
+    packed_info = 0
+    age = 200
+    sex = 'M'
+    civil_state = 'C'
+    grade = 'P'
 
-if civil_state == 'C':
-    packed_info = packed_info | 4
 
-if grado_academico == 'P':
-    packed_info = packed_info | 3
+    packed_info = age << 4
 
-elif grado_academico == 'G':
-    packed_info = packed_info | 2
+    if sex == 'M':
+        packed_info = packed_info | 8
 
-elif grado_academico == 'B':
-    packed_info = packed_info | 1
+    if civil_state == 'C':
+        packed_info = packed_info | 4
 
-print(f'{packed_info:b}')
-print(packed_info)
+    if grade == 'P':
+        packed_info = packed_info | 3
+
+    elif grade == 'G':
+        packed_info = packed_info | 2
+
+    elif grade == 'B':
+        packed_info = packed_info | 1
+
+    print(f'{packed_info:b}')
+    print(packed_info)
+
+
+
+if len(sys.argv) >= 2:
+    main()
+else:
+    print('Especificar document. ej. reg_data.py datos.csv')
